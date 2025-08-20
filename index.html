@@ -37,29 +37,44 @@
       color: #d4f4dd;
       margin: 0;
     }
-    nav ul {
-      list-style:none;
-      display:flex;
-      justify-content:center;
-      margin:0;
-      padding:0;
-      flex-wrap:wrap;
+
+    /* Horizontal scroll nav */
+    .nav-container {
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
     }
-    nav li {margin:0 15px;}
-    nav a {
+    .nav-container ul {
+      display: flex;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+    .nav-container li {
+      flex: 0 0 auto;
+      margin: 0 15px;
+    }
+    .nav-container a {
       color:white;
       text-decoration:none;
       font-weight:bold;
       cursor:pointer;
     }
-    nav a:hover {text-decoration:underline;}
-    
+    .nav-container a:hover {text-decoration:underline;}
+    .nav-container::-webkit-scrollbar {
+      height:6px;
+    }
+    .nav-container::-webkit-scrollbar-thumb {
+      background:#00cc66;
+      border-radius:3px;
+    }
+
     main {
       flex:1;
       display:flex;
       justify-content:center;
       align-items:flex-start;
-      padding:160px 20px 60px; /* space for header & footer */
+      padding:160px 20px 60px;
     }
     section {
       display:none;
@@ -74,16 +89,16 @@
       background:#000;
       color:#aaa;
       text-align:center;
-      padding:10px;
+      padding:6px;
       position:fixed;
       bottom:0; left:0;
       width:100%;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
     }
     footer span.brand {
       font-family: "Wide Latin", serif;
       color: #00aaff;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     
     .chat-btn {
@@ -103,7 +118,7 @@
     }
 
     @media(max-width:768px){
-      nav ul{flex-direction:column; align-items:center;}
+      .nav-container ul{flex-wrap: nowrap;}
     }
 
     @keyframes fadeIn {
@@ -158,7 +173,7 @@
   <header>
     <h1>CRYSTALCLEAN SOLUTIONS</h1>
     <p class="tagline">“Where Clean Meets Confidence.”</p>
-    <nav>
+    <nav class="nav-container">
       <ul>
         <li><a data-target="home">Home</a></li>
         <li><a data-target="about">About Us</a></li>
@@ -173,6 +188,7 @@
   </header>
 
   <main>
+    <!-- Sections same as your original code -->
     <section id="home" class="active">
       <h2>Welcome to CrystalClean Solutions</h2>
       <p style="text-align:center">Cleaning & Corporate Excellence Combined.</p>
@@ -182,14 +198,12 @@
         <p>> What’s good for our customers, is also in the long run good for us.</p>
       </div>
     </section>
-
     <section id="about">
       <h2>About Us</h2>
       <p>> CrystalClean Solutions provides professional cleaning and advisory services with integrity and excellence.</p>
       <p>> <b>Vision:</b> To be the most trusted cleaning and corporate advisory partner.</p>
       <p>> <b>Mission:</b> Deliver spotless cleaning solutions and accurate financial advisory that empower our clients to thrive.</p>
     </section>
-
     <section id="services">
       <h2>Our Services</h2>
       <p>> Sofa & Mattress Cleaning</p>
@@ -212,17 +226,14 @@
       <p>> Annual Returns</p>
       <p>> KRA Cases & Forensic Audits</p>
     </section>
-
     <section id="projects">
       <h2>Projects</h2>
       <p>> Showcasing our successful cleaning and advisory projects across SMEs, corporates, and NGOs.</p>
     </section>
-
     <section id="team">
       <h2>Our Team</h2>
       <p>> Founder & Team Lead: James Omondi</p>
     </section>
-
     <section id="testimonials">
       <h2>Testimonials</h2>
       <div class="review-box">
@@ -242,87 +253,19 @@
         <p id="noReviews">No reviews yet.</p>
       </div>
     </section>
-
     <section id="faq">
       <h2>FAQ</h2>
       <p>> <b>Q:</b> Do you bring your own supplies?<br>> <b>A:</b> Yes, we provide all equipment and products.</p>
       <p>> <b>Q:</b> How do I book?<br>> <b>A:</b> Contact us on WhatsApp or email.</p>
     </section>
-
     <section id="contact">
       <h2>Contact Us</h2>
       <p>> Email: <a href="mailto:jamesowilly9@gmail.com">jamesowilly9@gmail.com</a></p>
-      <p>> Phone: +254 795 474796</p>
-      <p>> WhatsApp: <a href="https://wa.me/254707957459">+254 707 957459</a></p>
+      <p>> Phone: <a href="tel:+254795474796">+254 795 474796</a></p>
+      <p>> WhatsApp: <a href="https://wa.me/254707957459" target="_blank">+254 707 957459</a></p>
     </section>
   </main>
 
   <footer>
     <p>Site built by <span class="brand">WAYNEio.Inc</span></p>
-  </footer>
-
-  <a href="https://wa.me/254707957459" class="chat-btn">💬</a>
-
-  <script>
-    // Tab-like navigation
-    const navLinks = document.querySelectorAll("nav a");
-    const sections = document.querySelectorAll("main section");
-
-    navLinks.forEach(link => {
-      link.addEventListener("click", () => {
-        const targetId = link.getAttribute("data-target");
-        sections.forEach(sec => sec.classList.remove("active"));
-        document.getElementById(targetId).classList.add("active");
-      });
-    });
-
-    // Review & Rating system with localStorage persistence
-    const stars = document.querySelectorAll("#starRating span");
-    const reviewText = document.getElementById("reviewText");
-    const submitBtn = document.getElementById("submitReview");
-    const reviewsList = document.getElementById("reviewsList");
-    const noReviews = document.getElementById("noReviews");
-    let selectedRating = 0;
-
-    // Load saved reviews
-    const savedReviews = JSON.parse(localStorage.getItem("reviews")) || [];
-    if(savedReviews.length > 0){
-      noReviews.style.display = "none";
-      savedReviews.forEach(r => displayReview(r.rating, r.text));
-    }
-
-    stars.forEach(star => {
-      star.addEventListener("click", () => {
-        selectedRating = star.getAttribute("data-value");
-        stars.forEach(s => s.classList.remove("active"));
-        for(let i=0;i<selectedRating;i++){
-          stars[i].classList.add("active");
-        }
-      });
-    });
-
-    submitBtn.addEventListener("click", () => {
-      const text = reviewText.value.trim();
-      if(selectedRating > 0 && text){
-        const newReview = {rating:selectedRating, text:text};
-        savedReviews.push(newReview);
-        localStorage.setItem("reviews", JSON.stringify(savedReviews));
-        displayReview(selectedRating, text);
-        reviewText.value = "";
-        stars.forEach(s => s.classList.remove("active"));
-        selectedRating = 0;
-        noReviews.style.display = "none";
-      } else {
-        alert("Please select a star rating and write a comment.");
-      }
-    });
-
-    function displayReview(rating, text){
-      const newReview = document.createElement("div");
-      newReview.classList.add("submitted-review");
-      newReview.innerHTML = `<p>Rating: ${"★".repeat(rating)}</p><p>${text}</p>`;
-      reviewsList.appendChild(newReview);
-    }
-  </script>
-</body>
-</html>
+  </
